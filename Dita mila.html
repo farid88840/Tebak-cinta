@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tebak Cinta Buat Kamu</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      background: linear-gradient(to right, #ffe6f0, #fff0f5);
+      padding: 30px;
+    }
+    h1 {
+      color: #d63384;
+      margin-bottom: 10px;
+      animation: fadeIn 2s ease-in-out;
+    }
+    .question {
+      font-size: 20px;
+      margin: 20px 0 10px;
+    }
+    .options button {
+      display: block;
+      margin: 10px auto;
+      padding: 10px 20px;
+      border: none;
+      background-color: #ff66b2;
+      color: white;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .options button:hover {
+      background-color: #e60073;
+    }
+    #result {
+      margin-top: 30px;
+      font-size: 18px;
+      color: #b30059;
+      font-weight: bold;
+    }
+    #love-sound, #intro-sound {
+      display: none;
+    }
+    #endMessage {
+      margin-top: 40px;
+      font-size: 22px;
+      color: #cc0052;
+      animation: fadeInUp 1s ease-in-out;
+    }
+    .heart {
+      font-size: 32px;
+      animation: pulse 1.5s infinite;
+      margin-top: 20px;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(-20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    @keyframes fadeInUp {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    @keyframes pulse {
+      0% {transform: scale(1); color: #ff3366;}
+      50% {transform: scale(1.2); color: #ff99cc;}
+      100% {transform: scale(1); color: #ff3366;}
+    }
+  </style>
+</head>
+<body>
+  <h1>Game Tebak Cinta</h1>
+  <div class="heart">❤️</div>
+  <div id="game">
+    <div class="question" id="question">Loading soal...</div>
+    <div class="options" id="options"></div>
+  </div>
+  <div id="result"></div>
+  <div id="endMessage"></div>
+
+  <!-- Audio -->
+  <audio id="intro-sound" src="https://www.soundjay.com/human/kiss-01.mp3" preload="auto"></audio>
+  <audio id="love-sound" src="https://www.soundjay.com/buttons/sounds/button-4.mp3" preload="auto"></audio>
+
+  <script>
+    const soalCinta = [
+      {
+        tanya: "1. Apa warna cinta sejati menurut kamu?",
+        pilihan: {
+          A: "Merah",
+          B: "Biru",
+          C: "Hitam",
+          D: "Emas",
+          E: "Merah tua"
+        },
+        jawaban: "A"
+      },
+      {
+        tanya: "2. Kalau aku diam, itu artinya?",
+        pilihan: {
+          A: "Ngambek",
+          B: "Kerja + Lagi mikirin kamu",
+          C: "Lagi main game",
+          D: "Badmood",
+          E: "Lupa password"
+        },
+        jawaban: "B"
+      },
+      {
+        tanya: "3. Lagu cinta terbaik menurutmu?",
+        pilihan: {
+          A: "Duka - Last child",
+          B: "Adele - Easy On Me",
+          C: "Dewa - Pupus",
+          D: "Tulus - Hati-hati di Jalan",
+          E: "Semua yang tentang Mila"
+        },
+        jawaban: "E"
+      },
+      {
+        tanya: "4. Tempat paling cocok buat nyatain cinta?",
+        pilihan: {
+          A: "Pantai",
+          B: "Gunung kembar",
+          C: "Depan rumah kamu",
+          D: "Rumah walid",
+          E: "Pas Sakaratul maut"
+        },
+        jawaban: "C"
+      },
+      {
+        tanya: "5. Kalau kita jadian, aku bakal?",
+        pilihan: {
+          A: "Serius",
+          B: "Selingkuh",
+          C: "Main-main",
+          D: "Lupa kamu",
+          E: "Ghosting"
+        },
+        jawaban: "A"
+      },
+      {
+        tanya: "6. Kalo kamu senyum, rasanya kayak?",
+        pilihan: {
+          A: "Kopi pahit",
+          B: "Matahari pagi",
+          C: "Jatuh dari motor",
+          D: "Sinar flash Mobil pro7",
+          E: "Pengen Salto"
+        },
+        jawaban: "B"
+      },
+      {
+        tanya: "7. Kalau aku kasih bunga, kamu?",
+        pilihan: {
+          A: "Buang",
+          B: "Foto dulu",
+          C: "Kasih ke tetangga",
+          D: "Simpan baik-baik",
+          E: "Nyuruh beli yang lebih mahal"
+        },
+        jawaban: "D"
+      },
+      {
+        tanya: "8. Cinta itu datang dari?",
+        pilihan: {
+          A: "Mata",
+          B: "Dompet",
+          C: "Mulut",
+          D: "Hati",
+          E: "Telinga"
+        },
+        jawaban: "D"
+      },
+      {
+        tanya: "9. Momen terbaik dalam cinta itu?",
+        pilihan: {
+          A: "Saat ketemu",
+          B: "Saat LDR",
+          C: "Saat bertengkar",
+          D: "Saat saling diam",
+          E: "Saat di-typoin"
+        },
+        jawaban: "A"
+      },
+      {
+        tanya: "10. Siapa yang paling manis hari ini?",
+        pilihan: {
+          A: "Aku",
+          B: "farid",
+          C: "Mila",
+          D: "Semut",
+          E: "Buaya darat"
+        },
+        jawaban: "C"
+      }
+    ];
+
+    let index = 0;
+    let skor = 0;
+
+    function tampilSoal() {
+      if (index < soalCinta.length) {
+        const soal = soalCinta[index];
+        document.getElementById("question").textContent = soal.tanya;
+        const opsiContainer = document.getElementById("options");
+        opsiContainer.innerHTML = "";
+
+        for (const [key, value] of Object.entries(soal.pilihan)) {
+          const btn = document.createElement("button");
+          btn.textContent = `${key}. ${value}`;
+          btn.onclick = () => cekJawaban(key, soal.jawaban);
+          opsiContainer.appendChild(btn);
+        }
+      } else {
+        akhirPermainan();
+      }
+    }
+
+    function cekJawaban(pilihan, kunci) {
+      const suara = document.getElementById("love-sound");
+      if (pilihan === kunci) {
+        skor++;
+        suara.play();
+        document.getElementById("result").textContent = "Jawaban kamu benar! Kamu emang romantis!";
+      } else {
+        document.getElementById("result").textContent = "Belum tepat, tapi hatimu tetap indah.";
+      }
+      index++;
+      setTimeout(() => {
+        document.getElementById("result").textContent = "";
+        tampilSoal();
+      }, 1000);
+    }
+
+    function akhirPermainan() {
+      document.getElementById("game").style.display = "none";
+      const pesan = `
+        Kamu berhasil menjawab ${skor} dari 10 soal.<br><br>
+        Tapi lebih dari itu...<br>
+        <strong>Aku cuma mau bilang:</strong><br>
+        <em>Terima kasih udah jadi kamu yang selalu bikin aku senyum.</em><br><br>
+        Kalau kamu senang main ini...<br>
+        <strong>Mau nggak kamu jadi alasan kenapa aku bahagia setiap hari?</strong>
+      `;
+      document.getElementById("endMessage").innerHTML = pesan;
+    }
+
+    // Mainkan suara intro saat mulai
+    window.onload = function() {
+      const intro = document.getElementById("intro-sound");
+      intro.play();
+      tampilSoal();
+    };
+  </script>
+</body>
+</html>
